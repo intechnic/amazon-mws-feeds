@@ -88,10 +88,17 @@ class MarketplaceWebService_Client implements MarketplaceWebService_Interface
    * </ul>
    */
   public function __construct(
-  $awsAccessKeyId, $awsSecretAccessKey, $config, $applicationName, $applicationVersion, $attributes = null) {
-	iconv_set_encoding('output_encoding', 'UTF-8');
-    iconv_set_encoding('input_encoding', 'UTF-8');
-    iconv_set_encoding('internal_encoding', 'UTF-8');
+  $awsAccessKeyId, $awsSecretAccessKey, $config, $applicationName, $applicationVersion, $attributes = null)
+  {
+
+
+      if (version_compare(phpversion(), '5.6.0', '<')) {
+          iconv_set_encoding('output_encoding', 'UTF-8');
+          iconv_set_encoding('input_encoding', 'UTF-8');
+          iconv_set_encoding('internal_encoding', 'UTF-8');
+      }
+
+
 
     $this->awsAccessKeyId = $awsAccessKeyId;
     $this->awsSecretAccessKey = $awsSecretAccessKey;
