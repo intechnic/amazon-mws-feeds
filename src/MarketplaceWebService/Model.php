@@ -108,7 +108,7 @@ abstract class MarketplaceWebService_Model
                     } else {
                         foreach ($fieldValue as $item) {
                             $xml .= "<$fieldName>";
-                            $xml .= $this->escapeXML($item);
+                            $xml .= $this->escapeXML($this->prepareForXML($item));
                             $xml .= "</$fieldName>";
                         }
                     }
@@ -119,7 +119,7 @@ abstract class MarketplaceWebService_Model
                         $xml .= "</$fieldName>";
                     } else {
                         $xml .= "<$fieldName>";
-                        $xml .= $this->escapeXML($fieldValue);
+                        $xml .= $this->escapeXML($this->prepareForXML($fieldValue));
                         $xml .= "</$fieldName>";
                     }
                 }
@@ -140,6 +140,26 @@ abstract class MarketplaceWebService_Model
         return str_replace($from, $to, $str); 
     }
 
+
+    /**
+     * Converts value to be used in XML
+     *
+     * @param string $value Value to prepare.
+     * @return string
+     * @see fromDOMElement()
+     */
+    private function prepareForXML($value)
+    {
+        if ($value instanceof DateTime) {
+            return $value->format('c');
+        }
+
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        return $value;
+    }
 
     
     /**
