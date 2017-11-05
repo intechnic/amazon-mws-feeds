@@ -76,7 +76,7 @@ class MarketplaceWebService_Exception extends Exception
             if(isset($errorInfo["ErrorType"])) $this->errorType = $errorInfo["ErrorType"];
             if(isset($errorInfo["RequestId"])) $this->requestId = $errorInfo["RequestId"];
             if(isset($errorInfo["XML"])) $this->xml= $errorInfo["XML"];
-            if(isset($errorInfo["ResponseHeaderMetadata"])) $this->xml= $errorInfo["ResponseHeaderMetadata"];
+            if(isset($errorInfo["ResponseHeaderMetadata"])) $this->responseHeaderMetadata= $errorInfo["ResponseHeaderMetadata"];
         }
     }
 
