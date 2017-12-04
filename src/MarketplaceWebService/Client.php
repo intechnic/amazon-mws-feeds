@@ -932,7 +932,10 @@ class MarketplaceWebService_Client implements MarketplaceWebService_Interface
     $responseHeaderMetadata = new MarketplaceWebService_Model_ResponseHeaderMetadata(
               $parsedHeader['x-mws-request-id'],
               $parsedHeader['x-mws-response-context'],
-              $parsedHeader['x-mws-timestamp']);
+              $parsedHeader['x-mws-timestamp'],
+              $parsedHeader['x-mws-quota-max'],
+              $parsedHeader['x-mws-quota-remaining'],
+              $parsedHeader['x-mws-quota-resetson']);
 
     $code = (int) curl_getinfo($this->curlClient, CURLINFO_HTTP_CODE);
     
@@ -995,13 +998,20 @@ class MarketplaceWebService_Client implements MarketplaceWebService_Interface
    */
   private function parseHttpHeader($header) {
     $parsedHeader = array ();
+    $parsedHeader['x-mws-request-id'] = null;
+    $parsedHeader['x-mws-response-context'] = null;
+    $parsedHeader['x-mws-timestamp'] = null;
+    $parsedHeader['x-mws-quota-max'] = null;
+    $parsedHeader['x-mws-quota-remaining'] = null;
+    $parsedHeader['x-mws-quota-resetson'] = null;
+
     foreach (explode("\n", $header) as $line) {
       $splitLine = preg_split('/:\s/', $line, 2, PREG_SPLIT_NO_EMPTY);
 
       if (sizeof($splitLine) == 2) {
         $k = strtolower(trim($splitLine[0]));
         $v = trim($splitLine[1]);
-        if (array_key_exists($k, $parsedHeader)) {
+        if (isset($parsedHeader[$k]) && $parsedHeader[$k]!==null) {
           $parsedHeader[$k] = $parsedHeader[$k] . "," . $v;
         } else {
           $parsedHeader[$k] = $v;
